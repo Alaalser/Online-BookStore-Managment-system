@@ -1,1 +1,1 @@
-console.log("controllers");
+export { default as authController } from "./auth.controller";

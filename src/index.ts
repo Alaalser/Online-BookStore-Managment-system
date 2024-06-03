@@ -4,6 +4,7 @@ import http from "http";
 import cors from "cors";
 import { initDB } from "./models";
 import config from "./config";
+import routes from "./routes";
 
 const app: Application = express();
 const PORT = config.port || 3000;
@@ -11,6 +12,7 @@ const PORT = config.port || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/api/v1", routes);
 
 let server: http.Server;
 let dbClient: any;
