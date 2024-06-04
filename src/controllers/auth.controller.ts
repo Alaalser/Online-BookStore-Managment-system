@@ -2,13 +2,27 @@ import { authService } from "../services";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
+const signIn = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+  try {
+    const token = await authService.signin(email, password);
+
+    res.cookie("jwt", token, {
+      httpOnly: true,
+    });
+    return res.status(StatusCodes.ACCEPTED).send({ token });
+  } catch (error: any) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .send({ message: error.message, status: error.statusCode });
+  }
+};
+
 const signup = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
   try {
-    const { accessToken } = await authService.signup(name, email, password);
-    return res.status(StatusCodes.CREATED).send({
-      token: accessToken,
-    });
+    await authService.signup(name, email, password);
+    return res.status(StatusCodes.CREATED).send("signup succfully");
   } catch (error: any) {
     return res
       .status(StatusCodes.BAD_REQUEST)
@@ -17,5 +31,6 @@ const signup = async (req: Request, res: Response) => {
 };
 
 export default {
+  signIn,
   signup,
 };

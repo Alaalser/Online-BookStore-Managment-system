@@ -10,8 +10,10 @@ import {
   CreatedAt,
   UpdatedAt,
   DeletedAt,
+  BeforeCreate,
 } from "sequelize-typescript";
 import { IUser } from "../types";
+import { comparePassword, hashPassword } from "../utils/auth";
 
 @Table({
   timestamps: true,
@@ -44,4 +46,17 @@ export default class User extends Model implements IUser {
 
   @DeletedAt
   deleted_at!: Date;
+
+  @BeforeCreate
+  static async encryptPassword(user: User) {
+    const encryptedPassword: any = await hashPassword(user.password);
+    user.password = String(encryptedPassword);
+  }
+}
+
+export async function compareUserPassword(
+  user: User,
+  password: string
+): Promise<boolean | null> {
+  return comparePassword(password, user.password);
 }
