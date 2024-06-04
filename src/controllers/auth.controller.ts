@@ -30,7 +30,18 @@ const signup = async (req: Request, res: Response) => {
   }
 };
 
+const logout = async (req: Request, res: Response) => {
+  try {
+    res.clearCookie("jwt");
+    return res.send("logout succfully");
+  } catch (error: any) {
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send({ message: error?.message, status: error.statusCode });
+  }
+};
 export default {
   signIn,
   signup,
+  logout,
 };
