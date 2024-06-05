@@ -15,7 +15,7 @@ const createUser = async (
   email: string,
   password: string
 ): Promise<User> => {
-  const newUser = await User.create({ email, password });
+  const newUser = await User.create({ name, email, password });
   return newUser;
 };
 

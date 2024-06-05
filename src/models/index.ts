@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize-typescript";
 import config from "../config";
 import User from "./user.model";
+import Book from "./book.model";
 
 export const sequelize = new Sequelize({
   host: config.dbHost,
@@ -11,7 +12,7 @@ export const sequelize = new Sequelize({
   logging: false,
 });
 
-sequelize.addModels([User]);
+sequelize.addModels([User, Book]);
 
 export const initDB = async () => {
   try {

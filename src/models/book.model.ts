@@ -6,12 +6,10 @@ import {
   AutoIncrement,
   AllowNull,
   NotEmpty,
-  BelongsTo,
   CreatedAt,
   UpdatedAt,
   DeletedAt,
 } from "sequelize-typescript";
-import User from "./user.model"; // Import the User model
 
 @Table({
   timestamps: true,
@@ -37,9 +35,6 @@ export default class Book extends Model {
 
   @Column
   price?: string;
-
-  @BelongsTo(() => User)
-  userId?: number;
 
   @CreatedAt
   created_at!: Date;
