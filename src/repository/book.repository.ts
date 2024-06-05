@@ -1,5 +1,4 @@
 import Book from "../models/book.model";
-import IBook from "types/book";
 
 const findBookById = async (id: number): Promise<Book | null> => {
   const book = await Book.findByPk(id);
@@ -39,4 +38,12 @@ const updateBook = async (
 const deleteBook = async (id: string): Promise<Book | any> => {
   const book = await Book.destroy(id as any);
   return book;
+};
+
+export default {
+  findAllBooks,
+  findBookById,
+  createBook,
+  deleteBook,
+  updateBook,
 };
