@@ -35,8 +35,12 @@ const updateBook = async (
   return book;
 };
 
-const deleteBook = async (id: string): Promise<Book | any> => {
-  const book = await Book.destroy(id as any);
+const deleteBook = async (id: number): Promise<Book | any> => {
+  const book = await Book.destroy({
+    where: {
+      id,
+    },
+  });
   return book;
 };
 

@@ -13,7 +13,7 @@ const signIn = async (req: Request, res: Response) => {
     return res.status(StatusCodes.ACCEPTED).send({ token });
   } catch (error: any) {
     return res
-      .status(StatusCodes.BAD_REQUEST)
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send({ message: error.message, status: error.statusCode });
   }
 };
@@ -25,7 +25,7 @@ const signup = async (req: Request, res: Response) => {
     return res.status(StatusCodes.CREATED).send("signup succfully");
   } catch (error: any) {
     return res
-      .status(StatusCodes.BAD_REQUEST)
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send({ message: error.message, status: error.statusCode });
   }
 };

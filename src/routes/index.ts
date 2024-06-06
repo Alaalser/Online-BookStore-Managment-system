@@ -1,12 +1,16 @@
 import express from "express";
 import authRoute from "./auth.route";
-
+import bookRoute from "./book.route";
 const router = express.Router();
 
 const appRoutes = [
   {
     path: "/auth",
     route: authRoute,
+  },
+  {
+    path: "/books",
+    route: bookRoute,
   },
 ];
 
