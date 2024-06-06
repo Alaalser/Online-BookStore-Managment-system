@@ -1,11 +1,7 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import * as express from "express";
 declare global {
   namespace Express {
     interface Request {
-      user?: Record<string, any>;
-      kid?: Record<string, any>;
-      files: any;
+      user?: any; // Adjust the type according to your 'user' object structure
     }
   }
 }

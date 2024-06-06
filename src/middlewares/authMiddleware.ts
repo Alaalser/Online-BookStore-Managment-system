@@ -1,14 +1,11 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import jwt from "jsonwebtoken";
 import config from "../config";
 import { ApiError } from "../utils/ApiError";
 import { StatusCodes } from "http-status-codes";
 import { authRepository } from "../repository";
-const authMiddleware = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+
+const authMiddleware = async (req: any, res: Response, next: NextFunction) => {
   if (!req.headers.authorization) {
     throw new ApiError(StatusCodes.UNAUTHORIZED, "UNAUTHORIZED");
   }
@@ -24,8 +21,8 @@ const authMiddleware = async (
       req.user = user;
       return next();
     }
-    return new ApiError(StatusCodes.UNAUTHORIZED, "Not Authorize User!");
-  } catch (error) {
+    throw new ApiError(StatusCodes.UNAUTHORIZED, "Not Authorize User!");
+  } catch (error: any) {
     next(error);
   }
 };

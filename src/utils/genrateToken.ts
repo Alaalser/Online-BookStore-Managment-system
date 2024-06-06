@@ -1,4 +1,4 @@
-import { IUser } from "types";
+import { IUser } from "../types";
 import jwt from "jsonwebtoken";
 import config from "../config";
 
