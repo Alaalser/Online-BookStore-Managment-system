@@ -11,9 +11,11 @@ import {
   UpdatedAt,
   DeletedAt,
   BeforeCreate,
+  HasMany,
 } from "sequelize-typescript";
 import { IUser } from "../types";
 import { comparePassword, hashPassword } from "../utils/auth";
+import Cart from "./cart.model";
 
 @Table({
   timestamps: true,
@@ -52,6 +54,9 @@ export default class User extends Model implements IUser {
     const encryptedPassword: any = await hashPassword(user.password);
     user.password = String(encryptedPassword);
   }
+
+  @HasMany(() => Cart, "user_id")
+  carts!: Cart[];
 }
 
 export async function compareUserPassword(

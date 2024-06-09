@@ -9,7 +9,10 @@ import {
   CreatedAt,
   UpdatedAt,
   DeletedAt,
+  BelongsToMany,
 } from "sequelize-typescript";
+import Cart from "./cart.model";
+import CartBook from "./cart-bookItem.model";
 
 @Table({
   timestamps: true,
@@ -44,4 +47,7 @@ export default class Book extends Model {
 
   @DeletedAt
   deleted_at!: Date;
+
+  @BelongsToMany(() => Cart, () => CartBook)
+  carts!: Cart[];
 }
