@@ -11,13 +11,25 @@ const getCart = async (userId: number) => {
   return cart;
 };
 
-const addToCart = async (cartId: number, bookId: number, quantity: number) => {
-  const cart = await cartRepository.addToCart(cartId, bookId, quantity);
+const addToCart = async (userId: number, bookId: number, quantity: number) => {
+  const cart = await cartRepository.addToCart(userId, bookId, quantity);
   return cart;
 };
 
-const removeFromCart = async (cartId: number, bookId: number) => {
-  const book = await cartRepository.removeFromCart(cartId, bookId);
+const updateCart = async (
+  userId: number,
+  bookId: number,
+  quantity: number
+) => {
+  const cart = await cartRepository.updateCart(userId, bookId, quantity);
+
+  if (!cart) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "inputs wrong");
+  }
+};
+
+const removeFromCart = async (userId: number, bookId: number) => {
+  const book = await cartRepository.removeFromCart(userId, bookId);
 
   if (!book) {
     throw new ApiError(StatusCodes.NOT_FOUND, "Book is not exist in the cart");
@@ -26,8 +38,15 @@ const removeFromCart = async (cartId: number, bookId: number) => {
   return book;
 };
 
+const clearCart = async (userId: number) => {
+  const cart = await cartRepository.clearCart(userId);
+  return cart;
+};
+
 export default {
   getCart,
   addToCart,
   removeFromCart,
+  clearCart,
+  updateCart,
 };

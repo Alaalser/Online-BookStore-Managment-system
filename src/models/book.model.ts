@@ -12,7 +12,7 @@ import {
   BelongsToMany,
 } from "sequelize-typescript";
 import Cart from "./cart.model";
-import CartBook from "./cart-bookItem.model";
+import CartItem from "./cart-bookItem.model";
 
 @Table({
   timestamps: true,
@@ -20,6 +20,7 @@ import CartBook from "./cart-bookItem.model";
 export default class Book extends Model {
   @PrimaryKey
   @AutoIncrement
+  @AllowNull(false)
   @Column
   id!: number;
 
@@ -48,6 +49,6 @@ export default class Book extends Model {
   @DeletedAt
   deleted_at!: Date;
 
-  @BelongsToMany(() => Cart, () => CartBook)
+  @BelongsToMany(() => Cart, () => CartItem)
   carts!: Cart[];
 }

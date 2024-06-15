@@ -7,11 +7,11 @@
     "dev": "NODE_ENV=development ts-node-dev --respawn src/index.ts",
     "start": "NODE_ENV=production node dist/index.js",
     "build": "tsc -p .",
+    "postinstall": "npm run build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --check .",
-    "prettier:fix": "prettier --write .",
-    "docker:dev": "docker-compose -f  docker-compose.dev.yml up"
+    "prettier:fix": "prettier --write ."
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

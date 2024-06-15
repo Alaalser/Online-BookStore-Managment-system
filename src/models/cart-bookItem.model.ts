@@ -1,11 +1,14 @@
 import {
   AllowNull,
+  BelongsTo,
   Column,
+  CreatedAt,
   Default,
+  DeletedAt,
   ForeignKey,
-  HasMany,
   Model,
   Table,
+  UpdatedAt,
 } from "sequelize-typescript";
 import Book from "./book.model";
 import Cart from "./cart.model";
@@ -14,22 +17,34 @@ import Cart from "./cart.model";
   timestamps: false,
   tableName: "cart_book_item",
 })
-export default class CartBook extends Model {
+export default class CartItem extends Model {
   @ForeignKey(() => Book)
-  @Column
   @AllowNull(false)
+  @Column
   book_id!: number;
 
   @ForeignKey(() => Cart)
-  @Column
   @AllowNull(false)
+  @Column
   cart_id!: number;
 
-  @Column
   @AllowNull(false)
   @Default(1)
+  @Column
   quantity!: number;
 
-  @HasMany(() => Book, "id")
-  books!: Book[];
+  @CreatedAt
+  created_at!: Date;
+
+  @UpdatedAt
+  updated_at!: Date;
+
+  @DeletedAt
+  deleted_at!: Date;
+
+  @BelongsTo(() => Book)
+  book!: Book;
+
+  @BelongsTo(() => Cart)
+  cart!: Cart;
 }

@@ -1,7 +1,8 @@
+import User from "./src/models/user.model";
 declare global {
   namespace Express {
     interface Request {
-      user?: any; // Adjust the type according to your 'user' object structure
+      user: User;
     }
   }
 }

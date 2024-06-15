@@ -1,48 +1,51 @@
 import {
+  AllowNull,
+  AutoIncrement,
   BelongsTo,
-  BelongsToMany,
   Column,
-  DataType,
+  CreatedAt,
+  DeletedAt,
+  ForeignKey,
+  HasMany,
   Model,
+  PrimaryKey,
   Table,
+  UpdatedAt,
 } from "sequelize-typescript";
 import User from "./user.model";
-import Book from "./book.model";
-import CartBook from "./cart-bookItem.model";
-import { enums } from "../types";
+import CartItem from "./cart-bookItem.model";
 
 @Table({
-  timestamps: false,
-  tableName: "carts",
+  timestamps: true,
+  tableName: "cart",
 })
 export default class Cart extends Model {
-  @Column({
-    type: DataType.DOUBLE,
-    allowNull: false,
-    defaultValue: 0,
-  })
-  discount!: number;
-  @Column({
-    type: DataType.DOUBLE,
-    allowNull: false,
-    defaultValue: 0,
-  })
-  total_cost!: number;
-  @Column({
-    type: DataType.DOUBLE,
-    allowNull: false,
-    defaultValue: 0,
-  })
-  tax!: number;
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-    defaultValue: enums.CART_STATUS.IN_PROGRESS,
-  })
-  status!: number;
+  @PrimaryKey
+  @AllowNull(false)
+  @AutoIncrement
+  @Column
+  id!: number;
 
-  @BelongsTo(() => User, "user_id")
+  @ForeignKey(() => User)
+  @AllowNull(false)
+  @Column
+  userId!: number;
+
+  @CreatedAt
+  @Column
+  created_at!: Date;
+
+  @UpdatedAt
+  @Column
+  updated_at!: Date;
+
+  @DeletedAt
+  @Column
+  deleted_at!: Date;
+
+  @HasMany(() => CartItem)
+  cartItems!: CartItem[];
+
+  @BelongsTo(() => User)
   user!: User;
-  @BelongsToMany(() => Book, () => CartBook)
-  books!: Book[];
 }

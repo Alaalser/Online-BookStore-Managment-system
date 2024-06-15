@@ -49,14 +49,14 @@ export default class User extends Model implements IUser {
   @DeletedAt
   deleted_at!: Date;
 
+  @HasMany(() => Cart)
+  carts!: Cart[];
+
   @BeforeCreate
   static async encryptPassword(user: User) {
     const encryptedPassword: any = await hashPassword(user.password);
     user.password = String(encryptedPassword);
   }
-
-  @HasMany(() => Cart, "user_id")
-  carts!: Cart[];
 }
 
 export async function compareUserPassword(

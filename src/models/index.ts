@@ -2,6 +2,8 @@ import { Sequelize } from "sequelize-typescript";
 import config from "../config";
 import User from "./user.model";
 import Book from "./book.model";
+import Cart from "./cart.model";
+import CartItem from "./cart-bookItem.model";
 
 export const sequelize = new Sequelize({
   host: config.dbHost,
@@ -10,9 +12,8 @@ export const sequelize = new Sequelize({
   password: config.dbPassword,
   dialect: "mysql",
   logging: false,
+  models: [User, Book, Cart, CartItem],
 });
-
-sequelize.addModels([User, Book]);
 
 export const initDB = async () => {
   try {

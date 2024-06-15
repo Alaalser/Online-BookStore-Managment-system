@@ -1,18 +1,32 @@
 import Book from "../models/book.model";
-import CartBook from "../models/cart-bookItem.model";
+import CartItem from "../models/cart-bookItem.model";
 import Cart from "../models/cart.model";
 import { enums } from "../types";
 
-const getCartBook = async (): Promise<CartBook[]> => {
-  return await CartBook.findAll();
+const getCartItem = async (): Promise<CartItem[]> => {
+  return await CartItem.findAll();
 };
 const getCatSingleBook = async (bookId: number) => {
-  return await CartBook.findOne({ where: { book_id: bookId } });
+  return await CartItem.findOne({ where: { book_id: bookId } });
 };
 
 const getCart = async (userId: number): Promise<Cart | null> => {
   const [cart] = await Cart.findOrCreate<Cart>({
-    where: { status: enums.CART_STATUS.IN_PROGRESS, user_id: userId },
+    where: {
+      user_id: userId,
+      include: [
+        {
+          model: CartItem,
+          as: "cart_book_item",
+          include: [
+            {
+              model: Book,
+              as: "book_id",
+            },
+          ],
+        },
+      ],
+    },
   });
   return cart;
 };
@@ -24,21 +38,11 @@ const getActiveCartById = async (cartId: string) => {
 };
 
 const addToCart = async (
-  cartId: number,
+  userId: number,
   bookId: number,
   quantity: number = 1
 ): Promise<Cart | null> => {
-  const [cartBook, created] = await CartBook.findOrCreate({
-    where: { cart_id: cartId, book_id: bookId },
-    defaults: { quantity },
-  });
-
-  if (!created) {
-    cartBook.quantity += quantity;
-    await cartBook.save();
-  }
-
-  const cart = await Cart.findByPk(cartId, {
+  let cart = await Cart.findByPk(userId, {
     include: [
       {
         model: Book,
@@ -49,40 +53,88 @@ const addToCart = async (
     ],
   });
 
+  if (!cart) {
+    cart = await Cart.create({ userId });
+  }
+  const [cartItem, created] = await CartItem.findOrCreate({
+    where: { cart_id: cart.dataValues.id, book_id: bookId },
+    defaults: { quantity },
+  });
+
+  if (!created) {
+    cartItem.quantity += quantity;
+    await cartItem.save();
+  }
+
+  return cart;
+};
+
+const updateCart = async (
+  userId: number,
+  bookId: number,
+  quantity: number
+): Promise<Cart | any> => {
+  const cart = await Cart.findOne({
+    where: { userId },
+  });
+
+  if (!cart) {
+    return;
+  }
+
+  CartItem.update(
+    { quantity },
+    {
+      where: { cart_id: cart.dataValues.id, bookId },
+    }
+  );
+
   return cart;
 };
 
 const removeFromCart = async (
-  cartId: number,
+  userId: number,
   bookId: number
 ): Promise<Book | any> => {
-  const cartBook = await CartBook.findOne({
-    where: { cart_id: cartId, book_id: bookId },
+  const cart = await Cart.findOne({
+    where: { userId },
   });
 
-  await cartBook?.destroy();
+  if (!cart) {
+    return;
+  }
 
-  return cartBook;
+  const cartItem = await CartItem.findOne({
+    where: { cart_id: cart.dataValues.id, book_id: bookId },
+  });
+
+  await cartItem?.destroy();
+
+  return cartItem;
 };
 
-const deleteCart = async (cartId: number): Promise<Cart | null> => {
-  const cart = await Cart.findByPk(cartId);
+const clearCart = async (userId: number): Promise<Cart | any> => {
+  const cart = await Cart.findOne({
+    where: { userId },
+  });
 
+  if (!cart) {
+    return;
+  }
   // Remove all books from the cart first
-  await CartBook.destroy({ where: { cart_id: cartId } });
+  await CartItem.destroy({ where: { cart_id: cart.dataValues.id } });
 
   // Delete the cart
-  await cart?.destroy();
-
-  return cart;
+  return await getCart(userId);
 };
 
 export default {
   getCatSingleBook,
-  getCartBook,
+  getCartItem,
   getActiveCartById,
   getCart,
   addToCart,
+  updateCart,
   removeFromCart,
-  deleteCart,
+  clearCart,
 };
