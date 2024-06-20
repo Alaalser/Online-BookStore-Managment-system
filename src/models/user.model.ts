@@ -16,6 +16,8 @@ import {
 import { IUser } from "../types";
 import { comparePassword, hashPassword } from "../utils/auth";
 import Cart from "./cart.model";
+import Order from "./order.model";
+import Address from "./address.model";
 
 @Table({
   timestamps: true,
@@ -51,6 +53,12 @@ export default class User extends Model implements IUser {
 
   @HasMany(() => Cart)
   carts!: Cart[];
+
+  @HasMany(() => Order, "user_id")
+  orders!: Order[];
+
+  @HasMany(() => Address, "user_id")
+  addresses!: Address[];
 
   @BeforeCreate
   static async encryptPassword(user: User) {

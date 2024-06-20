@@ -4,6 +4,8 @@ import User from "./user.model";
 import Book from "./book.model";
 import Cart from "./cart.model";
 import CartItem from "./cart-bookItem.model";
+import Order from "./order.model";
+import Address from "./address.model";
 
 export const sequelize = new Sequelize({
   host: config.dbHost,
@@ -12,7 +14,7 @@ export const sequelize = new Sequelize({
   password: config.dbPassword,
   dialect: "mysql",
   logging: false,
-  models: [User, Book, Cart, CartItem],
+  models: [User, Book, Cart, CartItem, Order, Address],
 });
 
 export const initDB = async () => {

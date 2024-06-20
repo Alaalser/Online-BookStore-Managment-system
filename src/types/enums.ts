@@ -1,8 +1,8 @@
-enum CART_STATUS {
-  IN_PROGRESS = 0,
-  MOVE_TO_ORDERS = 1,
+enum ORDER_STATUS {
+  ACTIVE = 0,
+  COMPLETED = 1,
 }
 
 export default {
-  CART_STATUS,
+  ORDER_STATUS,
 };

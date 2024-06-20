@@ -1,7 +1,7 @@
 import Book from "../models/book.model";
 import CartItem from "../models/cart-bookItem.model";
 import Cart from "../models/cart.model";
-import { enums } from "../types";
+// import { enums } from "../types";
 
 const getCartItem = async (): Promise<CartItem[]> => {
   return await CartItem.findAll();
@@ -31,11 +31,11 @@ const getCart = async (userId: number): Promise<Cart | null> => {
   return cart;
 };
 
-const getActiveCartById = async (cartId: string) => {
-  return await Cart.findOne({
-    where: { id: cartId, status: enums.CART_STATUS.IN_PROGRESS },
-  });
-};
+// const getActiveCartById = async (cartId: string) => {
+//   return await Cart.findOne({
+//     where: { id: cartId, status: enums.CART_STATUS.IN_PROGRESS },
+//   });
+// };
 
 const addToCart = async (
   userId: number,
@@ -131,7 +131,7 @@ const clearCart = async (userId: number): Promise<Cart | any> => {
 export default {
   getCatSingleBook,
   getCartItem,
-  getActiveCartById,
+  // getActiveCartById,
   getCart,
   addToCart,
   updateCart,

@@ -7,6 +7,7 @@ import {
   DeletedAt,
   ForeignKey,
   HasMany,
+  HasOne,
   Model,
   PrimaryKey,
   Table,
@@ -14,6 +15,7 @@ import {
 } from "sequelize-typescript";
 import User from "./user.model";
 import CartItem from "./cart-bookItem.model";
+import Order from "./order.model";
 
 @Table({
   timestamps: true,
@@ -48,4 +50,7 @@ export default class Cart extends Model {
 
   @BelongsTo(() => User)
   user!: User;
+
+  @HasOne(() => Order, "cart_id")
+  order!: Order;
 }

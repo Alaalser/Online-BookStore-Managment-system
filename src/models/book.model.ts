@@ -16,6 +16,7 @@ import CartItem from "./cart-bookItem.model";
 
 @Table({
   timestamps: true,
+  tableName: "books",
 })
 export default class Book extends Model {
   @PrimaryKey
