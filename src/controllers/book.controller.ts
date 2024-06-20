@@ -68,10 +68,49 @@ const deleteBook = async (req: Request, res: Response) => {
   }
 };
 
+const searchBooks = async (req: Request, res: Response) => {
+  try {
+    const { q } = req.query;
+    if (!q || typeof q !== "string") {
+      return res.status(400).json({ error: "Invalid search query" });
+    }
+
+    const books = await bookService.searchBooks(q);
+    return res.status(StatusCodes.ACCEPTED).json({ books });
+  } catch (error: any) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send({ message: error.message, status: error.statusCode });
+  }
+};
+
+const filterBooks = async (req: Request, res: Response) => {
+  try {
+    const { title, author, genre, minPrice, maxPrice } = req.query;
+
+    const options = {
+      title: title as string,
+      author: author as string,
+      genre: genre as string,
+      minPrice: minPrice ? parseFloat(minPrice as string) : undefined,
+      maxPrice: maxPrice ? parseFloat(maxPrice as string) : undefined,
+    };
+
+    const books = await bookService.filterBooks(options);
+    return res.status(StatusCodes.ACCEPTED).json({ books });
+  } catch (error: any) {
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send({ message: error.message, status: error.statusCode });
+  }
+};
+
 export default {
   getAllBooks,
   getSingleBook,
   createBook,
   updateBook,
   deleteBook,
+  searchBooks,
+  filterBooks,
 };

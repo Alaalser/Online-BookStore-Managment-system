@@ -60,10 +60,28 @@ const deleteBook = async (id: number) => {
   return book;
 };
 
+const searchBooks = async (searchTerm: string) => {
+  return await bookRepository.searchBooks(searchTerm);
+};
+
+interface FilterOptions {
+  title?: string;
+  author?: string;
+  genre?: string;
+  minPrice?: number;
+  maxPrice?: number;
+}
+
+export const filterBooks = async (options: FilterOptions) => {
+  return await bookRepository.filterBooks(options);
+};
+
 export default {
   getAllBooks,
   getSingleBook,
   createBook,
   updateBook,
   deleteBook,
+  searchBooks,
+  filterBooks,
 };

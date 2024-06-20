@@ -8,7 +8,6 @@ import {
   NotEmpty,
   CreatedAt,
   UpdatedAt,
-  DeletedAt,
   BelongsToMany,
 } from "sequelize-typescript";
 import Cart from "./cart.model";
@@ -46,9 +45,6 @@ export default class Book extends Model {
 
   @UpdatedAt
   updated_at!: Date;
-
-  @DeletedAt
-  deleted_at!: Date;
 
   @BelongsToMany(() => Cart, () => CartItem)
   carts!: Cart[];
