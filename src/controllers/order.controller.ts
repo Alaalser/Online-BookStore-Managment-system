@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import User from "../models/user.model";
 import { orderService } from "../services";
 import { addressRepository } from "../repository";
@@ -6,7 +6,7 @@ import { ApiError } from "../utils/ApiError";
 import { StatusCodes } from "http-status-codes";
 import { enums } from "../types";
 
-const CreateOrder = async (req: Request, res: Response) => {
+const CreateOrder = async (req: any, res: Response) => {
   try {
     const { transactionId, cartId, addressId } = req.body;
     const user = req.user as User;
@@ -44,7 +44,7 @@ const CreateOrder = async (req: Request, res: Response) => {
   }
 };
 
-const getAllOrders = async (req: Request, res: Response) => {
+const getAllOrders = async (req: any, res: Response) => {
   try {
     const user = req.user as User;
     const orders = await orderService.getOrdersByUserId(user.id);
@@ -60,7 +60,7 @@ const getAllOrders = async (req: Request, res: Response) => {
   }
 };
 
-const getOrderById = async (req: Request, res: Response) => {
+const getOrderById = async (req: any, res: Response) => {
   try {
     const user = req.user as User;
     const { id } = req.body;

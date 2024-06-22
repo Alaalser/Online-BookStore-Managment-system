@@ -2,6 +2,9 @@ import express from "express";
 import authRoute from "./auth.route";
 import bookRoute from "./book.route";
 import cartRoute from "./cart.route";
+import orderRoute from "./order.route";
+import addressRoute from "./address.route";
+
 const router = express.Router();
 
 const appRoutes = [
@@ -16,6 +19,14 @@ const appRoutes = [
   {
     path: "/cart",
     route: cartRoute,
+  },
+  {
+    path: "/order",
+    route: orderRoute,
+  },
+  {
+    path: "/address",
+    route: addressRoute,
   },
 ];
 

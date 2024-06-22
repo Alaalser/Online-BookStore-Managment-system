@@ -12,9 +12,11 @@ import {
   PrimaryKey,
   Table,
   UpdatedAt,
+  BelongsToMany,
 } from "sequelize-typescript";
 import User from "./user.model";
 import CartItem from "./cart-bookItem.model";
+import Book from "./book.model";
 import Order from "./order.model";
 
 @Table({
@@ -53,4 +55,7 @@ export default class Cart extends Model {
 
   @HasOne(() => Order, "cart_id")
   order!: Order;
+
+  @BelongsToMany(() => Book, () => CartItem)
+  books!: Book[];
 }

@@ -13,20 +13,20 @@ const getCatSingleBook = async (bookId: number) => {
 const getCart = async (userId: number): Promise<Cart | null> => {
   const [cart] = await Cart.findOrCreate<Cart>({
     where: {
-      user_id: userId,
-      include: [
-        {
-          model: CartItem,
-          as: "cart_book_item",
-          include: [
-            {
-              model: Book,
-              as: "book_id",
-            },
-          ],
-        },
-      ],
+      userId: userId,
     },
+    include: [
+      {
+        model: CartItem,
+        as: "cartItems",
+        include: [
+          {
+            model: Book,
+            as: "book",
+          },
+        ],
+      },
+    ],
   });
   return cart;
 };
@@ -62,7 +62,7 @@ const addToCart = async (
   });
 
   if (!created) {
-    cartItem.quantity += quantity;
+    cartItem.quantity += Number(quantity);
     await cartItem.save();
   }
 
@@ -73,23 +73,64 @@ const updateCart = async (
   userId: number,
   bookId: number,
   quantity: number
-): Promise<Cart | any> => {
+): Promise<Cart | null> => {
+  // Find the cart associated with the user
   const cart = await Cart.findOne({
     where: { userId },
+    include: [
+      {
+        model: CartItem,
+        as: "cartItems",
+        include: [
+          {
+            model: Book,
+            as: "book",
+          },
+        ],
+      },
+    ],
   });
 
   if (!cart) {
-    return;
+    return null;
   }
 
-  CartItem.update(
-    { quantity },
-    {
-      where: { cart_id: cart.dataValues.id, bookId },
-    }
-  );
+  // Find the specific cart item
+  const cartItem = await CartItem.findOne({
+    where: { cart_id: cart.id, book_id: bookId },
+  });
 
-  return cart;
+  if (!cartItem) {
+    return null;
+  }
+
+  // Update the quantity: increase or decrease by 1
+  cartItem.quantity += Number(quantity);
+
+  // Ensure quantity doesn't go below 1
+  if (cartItem.quantity < 1) {
+    cartItem.quantity = 1;
+  }
+
+  await cartItem.save();
+
+  // Re-fetch the cart to include the updated cart items
+  const updatedCart = await Cart.findByPk(cart.id, {
+    include: [
+      {
+        model: CartItem,
+        as: "cartItems",
+        include: [
+          {
+            model: Book,
+            as: "book",
+          },
+        ],
+      },
+    ],
+  });
+
+  return updatedCart;
 };
 
 const removeFromCart = async (

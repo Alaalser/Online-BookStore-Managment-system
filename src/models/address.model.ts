@@ -1,7 +1,7 @@
 import {
+  AllowNull,
   BelongsTo,
   Column,
-  DataType,
   Model,
   Table,
 } from "sequelize-typescript";
@@ -12,30 +12,24 @@ import User from "./user.model";
   tableName: "addresses",
 })
 export default class Address extends Model {
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
+  @AllowNull(false)
+  @Column
   first_name!: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
+
+  @AllowNull(false)
+  @Column
   last_name!: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
+
+  @AllowNull(false)
+  @Column
   country_code!: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
+
+  @AllowNull(false)
+  @Column
   mobile!: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
+
+  @AllowNull(false)
+  @Column
   location!: string;
 
   @BelongsTo(() => User, "user_id")
