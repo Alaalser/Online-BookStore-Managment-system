@@ -26,8 +26,13 @@ const getOrderById = async (id: number, userId: number) => {
   return await orderRepository.getOrderById(id as any, userId as any);
 };
 
+const getOrders = async () => {
+  return await orderRepository.getOrders();
+};
+
 export default {
   createOrder,
   getOrderById,
   getOrdersByUserId,
+  getOrders,
 };

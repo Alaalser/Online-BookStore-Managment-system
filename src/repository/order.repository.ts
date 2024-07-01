@@ -9,19 +9,24 @@ const createOrder = async (
   addressId: number
 ) => {
   const order = await Order.create({
-    where: {
-      user_id: userId,
-      cart_id: cartId,
-      address_id: addressId,
-    },
-    include: [{ email, status, transaction_Id: transactionId }],
+    email,
+    status,
+    transaction_id: transactionId,
+    user_id: userId, // Explicitly set user_id
+    cart_id: cartId, // Explicitly set cart_id
+    address_id: addressId,
   });
 
   return order;
 };
 
 const getOrderByUserId = async (userId: number) => {
-  return await Order.findAll({ where: { user_id: userId } });
+  const orders = await Order.findAll({ where: { user_id: userId } });
+  return orders;
+};
+
+const getOrders = async () => {
+  return await Order.findAll();
 };
 
 const getOrderById = async (id: string, userId: string) =>
@@ -33,4 +38,5 @@ export default {
   createOrder,
   getOrderById,
   getOrderByUserId,
+  getOrders,
 };

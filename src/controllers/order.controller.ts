@@ -8,7 +8,8 @@ import { enums } from "../types";
 
 const CreateOrder = async (req: any, res: Response) => {
   try {
-    const { transactionId, cartId, addressId } = req.body;
+    const { transaction_Id, cartId, addressId } = req.body;
+
     const user = req.user as User;
 
     const hasAddress = await addressRepository.getAddressById(
@@ -25,7 +26,7 @@ const CreateOrder = async (req: any, res: Response) => {
     const order = await orderService.createOrder(
       user.email,
       enums.ORDER_STATUS.ACTIVE,
-      parseInt(transactionId),
+      parseInt(transaction_Id),
       parseInt(user.id as any),
       parseInt(cartId),
       parseInt(addressId)
@@ -47,7 +48,7 @@ const CreateOrder = async (req: any, res: Response) => {
 const getAllOrders = async (req: any, res: Response) => {
   try {
     const user = req.user as User;
-    const orders = await orderService.getOrdersByUserId(user.id);
+    const orders = await orderService.getOrdersByUserId(Number(user.id));
     res.status(StatusCodes.ACCEPTED).json({
       data: {
         orders: orders,
