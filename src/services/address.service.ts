@@ -1,7 +1,8 @@
 import { addressRepository } from "../repository";
 
-const getAddress = (userId: number) => {
-  return addressRepository.getAddress(userId);
+const getAddress = async (userId: number) => {
+  const address = await addressRepository.getAddress(userId);
+  return address?.dataValues;
 };
 
 const addAddress = async (

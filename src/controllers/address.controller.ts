@@ -28,7 +28,7 @@ const getAddress = async (req: any, res: Response) => {
   try {
     return res
       .status(StatusCodes.ACCEPTED)
-      .send(addressService.getAddress(Number(user.id)));
+      .send(await addressService.getAddress(Number(user.id)));
   } catch (error: any) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
